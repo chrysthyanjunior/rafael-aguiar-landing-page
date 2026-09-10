@@ -11,16 +11,23 @@
 
     <meta
         name="description"
-        content="Rafael Aguiar - Corretor de imóveis. Curadoria imobiliária, imóveis de alto padrão, compra, venda e locação."
+        content="Imóveis em São Luís com Rafael Aguiar, CRECI 8404. Conheça as opções e consulte valores, plantas e disponibilidade pelo WhatsApp."
     >
 
-    <title>Rafael Aguiar | Corretor de Imóveis</title>
+    <title>Rafael Aguiar | Imóveis em São Luís</title>
 
+    <meta name="theme-color" content="#080808">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:title" content="Rafael Aguiar | Imóveis em São Luís">
+    <meta property="og:description" content="Conheça as opções de imóveis e converse com Rafael Aguiar sobre valores, plantas e disponibilidade.">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
 </head>
 
 
 <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
     <!-- ==================================================
         CABEÇALHO / HERO
@@ -31,14 +38,15 @@
         <!-- Vídeo de fundo -->
         <video
             class="hero-video"
-            autoplay
+            preload="none"
+            aria-hidden="true"
             muted
             loop
             playsinline
-            poster="assets/imagens/imovel-01.jpg"
+            poster="assets/imagens/imovel-01-960.webp"
         >
             <source
-                src="assets/videos/hero.mp4"
+                data-src="assets/videos/hero.mp4"
                 type="video/mp4"
             >
 
@@ -47,11 +55,12 @@
 
 
         <!-- Camada usada posteriormente para escurecer o vídeo -->
-        <div class="hero-overlay"></div>
+        <div class="hero-overlay" aria-hidden="true"></div>
+        <button class="video-toggle" type="button" hidden>Pausar vídeo</button>
 
 
         <!-- Navegação -->
-        <nav class="navbar">
+        <nav class="navbar" aria-label="Navegação principal">
 
             <a href="#inicio" class="logo">
                 RA
@@ -59,7 +68,7 @@
             </a>
 
 
-            <ul class="nav-links">
+            <ul class="nav-links" id="menu-principal">
 
                 <li>
                     <a href="#inicio">Início</a>
@@ -84,9 +93,12 @@
             </ul>
 
 
-            <!-- Será utilizado no mobile -->
+            <!-- Menu de navegação no celular -->
             <button
                 class="menu-mobile"
+                type="button"
+                aria-controls="menu-principal"
+                aria-expanded="false"
                 aria-label="Abrir menu de navegação"
             >
                 ☰
@@ -99,7 +111,7 @@
         <div class="hero-content">
 
             <p class="hero-subtitle">
-                Curadoria imobiliária de alto padrão
+                Imóveis de alto padrão em São Luís
             </p>
 
             <h1>
@@ -108,8 +120,8 @@
             </h1>
 
             <p class="hero-description">
-                Atendimento estratégico, personalizado e focado
-                em encontrar as melhores oportunidades para você.
+                Conte com Rafael Aguiar para encontrar opções em São Luís
+                alinhadas à sua região de interesse e ao seu investimento.
             </p>
 
 
@@ -119,17 +131,17 @@
                     href="#imoveis"
                     class="btn btn-primary"
                 >
-                    Conhecer imóveis
+                    Explorar imóveis
                 </a>
 
 
                 <a
-                    href="https://wa.me/5598991588444"
+                    href="https://wa.me/5598991588444?text=Ol%C3%A1%2C%20Rafael!%20Vim%20pelo%20seu%20site%20e%20gostaria%20de%20receber%20op%C3%A7%C3%B5es%20de%20im%C3%B3veis%20em%20S%C3%A3o%20Lu%C3%ADs."
                     target="_blank"
                     rel="noopener noreferrer"
                     class="btn btn-secondary"
                 >
-                    Falar no WhatsApp
+                    Receber opções no WhatsApp
                 </a>
 
             </div>
@@ -150,7 +162,7 @@
 
 
 
-    <main>
+    <main id="conteudo" tabindex="-1">
 
 
         <!-- ==================================================
@@ -242,25 +254,28 @@
 
                 <!-- CARROSSEL -->
 
-                <div class="carousel">
+                <div class="carousel" role="region" aria-roledescription="carrossel" aria-label="Imóveis em destaque">
 
                     <button
-                        class="carousel-btn carousel-prev"
+                        type="button" aria-controls="lista-imoveis" class="carousel-btn carousel-prev"
                         aria-label="Imóvel anterior"
                     >
                         &#10094;
                     </button>
 
 
-                    <div class="carousel-track">
+                    <div class="carousel-track" id="lista-imoveis" tabindex="0" aria-label="Lista de imóveis; use as setas para navegar">
 
 
                         <!-- IMÓVEL 01 -->
 
-                        <article class="property-card">
+                        <article class="property-card" data-property-id="imovel-01">
 
                             <img
-                                src="assets/imagens/imovel-01.jpg"
+                                src="assets/imagens/imovel-01-960.webp"
+                                srcset="assets/imagens/imovel-01-480.webp 480w, assets/imagens/imovel-01-960.webp 512w"
+                                sizes="(max-width: 700px) calc(100vw - 32px), (max-width: 1000px) 40vw, 360px"
+                                width="512" height="768" loading="lazy" decoding="async"
                                 alt="Empreendimento residencial de alto padrão"
                             >
 
@@ -285,11 +300,11 @@
                                 </p>
 
                                 <a
-                                    href="https://wa.me/5598991588444"
+                                    href="https://wa.me/5598991588444?text=Ol%C3%A1%2C%20Rafael!%20Vi%20Nexus%20Coup%C3%A9%20(refer%C3%AAncia%2001)%20no%20seu%20site%20e%20gostaria%20de%20consultar%20valores%2C%20planta%20e%20disponibilidade." aria-label="Consultar valores e planta: Nexus Coupé"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    Quero saber mais
+                                    Consultar valores e planta
                                 </a>
 
                             </div>
@@ -300,10 +315,13 @@
 
                         <!-- IMÓVEL 02 -->
 
-                        <article class="property-card">
+                        <article class="property-card" data-property-id="imovel-02">
 
                             <img
-                                src="assets/imagens/imovel-02.jpg"
+                                src="assets/imagens/imovel-02-960.webp"
+                                srcset="assets/imagens/imovel-02-480.webp 480w, assets/imagens/imovel-02-960.webp 736w"
+                                sizes="(max-width: 700px) calc(100vw - 32px), (max-width: 1000px) 40vw, 360px"
+                                width="736" height="920" loading="lazy" decoding="async"
                                 alt="Apartamento de alto padrão"
                             >
 
@@ -328,11 +346,11 @@
                                 </p>
 
                                 <a
-                                    href="https://wa.me/5598991588444"
+                                    href="https://wa.me/5598991588444?text=Ol%C3%A1%2C%20Rafael!%20Vi%20Apartamento%20Premium%20(refer%C3%AAncia%2002)%20no%20seu%20site%20e%20gostaria%20de%20consultar%20valores%2C%20planta%20e%20disponibilidade." aria-label="Consultar valores e planta: Apartamento Premium"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    Quero saber mais
+                                    Consultar valores e planta
                                 </a>
 
                             </div>
@@ -343,10 +361,13 @@
 
                         <!-- IMÓVEL 03 -->
 
-                        <article class="property-card">
+                        <article class="property-card" data-property-id="imovel-03">
 
                             <img
-                                src="assets/imagens/imovel-03.jpg"
+                                src="assets/imagens/imovel-03-960.webp"
+                                srcset="assets/imagens/imovel-03-480.webp 480w, assets/imagens/imovel-03-960.webp 736w"
+                                sizes="(max-width: 700px) calc(100vw - 32px), (max-width: 1000px) 40vw, 360px"
+                                width="736" height="736" loading="lazy" decoding="async"
                                 alt="Empreendimento moderno"
                             >
 
@@ -371,11 +392,11 @@
                                 </p>
 
                                 <a
-                                    href="https://wa.me/5598991588444"
+                                    href="https://wa.me/5598991588444?text=Ol%C3%A1%2C%20Rafael!%20Vi%20Novo%20empreendimento%20(refer%C3%AAncia%2003)%20no%20seu%20site%20e%20gostaria%20de%20consultar%20valores%2C%20planta%20e%20disponibilidade." aria-label="Consultar valores e planta: Novo empreendimento"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    Quero saber mais
+                                    Consultar valores e planta
                                 </a>
 
                             </div>
@@ -386,10 +407,13 @@
 
                         <!-- IMÓVEL 04 -->
 
-                        <article class="property-card">
+                        <article class="property-card" data-property-id="imovel-04">
 
                             <img
-                                src="assets/imagens/imovel-04.jpg"
+                                src="assets/imagens/imovel-04-960.webp"
+                                srcset="assets/imagens/imovel-04-480.webp 480w, assets/imagens/imovel-04-960.webp 960w"
+                                sizes="(max-width: 700px) calc(100vw - 32px), (max-width: 1000px) 40vw, 360px"
+                                width="960" height="971" loading="lazy" decoding="async"
                                 alt="Apartamento exclusivo"
                             >
 
@@ -414,11 +438,11 @@
                                 </p>
 
                                 <a
-                                    href="https://wa.me/5598991588444"
+                                    href="https://wa.me/5598991588444?text=Ol%C3%A1%2C%20Rafael!%20Vi%20Residencial%20exclusivo%20(refer%C3%AAncia%2004)%20no%20seu%20site%20e%20gostaria%20de%20consultar%20valores%2C%20planta%20e%20disponibilidade." aria-label="Consultar valores e planta: Residencial exclusivo"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    Quero saber mais
+                                    Consultar valores e planta
                                 </a>
 
                             </div>
@@ -429,7 +453,7 @@
 
 
                     <button
-                        class="carousel-btn carousel-next"
+                        type="button" aria-controls="lista-imoveis" class="carousel-btn carousel-next"
                         aria-label="Próximo imóvel"
                     >
                         &#10095;
@@ -441,29 +465,9 @@
 
                 <!-- Indicadores do carrossel -->
 
-                <div class="carousel-dots">
-
-                    <button
-                        class="dot active"
-                        aria-label="Slide 1"
-                    ></button>
-
-                    <button
-                        class="dot"
-                        aria-label="Slide 2"
-                    ></button>
-
-                    <button
-                        class="dot"
-                        aria-label="Slide 3"
-                    ></button>
-
-                    <button
-                        class="dot"
-                        aria-label="Slide 4"
-                    ></button>
-
-                </div>
+                <div class="carousel-dots" aria-label="Posições do carrossel"></div>
+                <p class="sr-only carousel-status" aria-live="polite" aria-atomic="true"></p>
+                <p class="property-note">Consulte valores, plantas e disponibilidade atualizados diretamente com Rafael.</p>
 
             </div>
 
@@ -486,7 +490,10 @@
                 <div class="sobre-imagem">
 
                     <img
-                        src="assets/imagens/corretor.jpeg"
+                        src="assets/imagens/corretor-960.webp"
+                                srcset="assets/imagens/corretor-480.webp 480w, assets/imagens/corretor-960.webp 960w"
+                                sizes="(max-width: 700px) calc(100vw - 50px), 500px"
+                                width="960" height="1440" loading="lazy" decoding="async"
                         alt="Rafael Aguiar, corretor de imóveis"
                     >
 
@@ -527,12 +534,12 @@
 
 
                     <a
-                        href="https://wa.me/5598991588444"
+                        href="https://wa.me/5598991588444?text=Ol%C3%A1%2C%20Rafael!%20Vim%20pelo%20seu%20site%20e%20gostaria%20de%20receber%20op%C3%A7%C3%B5es%20de%20im%C3%B3veis%20em%20S%C3%A3o%20Lu%C3%ADs."
                         target="_blank"
                         rel="noopener noreferrer"
                         class="btn btn-primary"
                     >
-                        Fale comigo
+                        Conversar sobre meu imóvel ideal
                     </a>
 
                 </div>
@@ -662,7 +669,7 @@
             FRASE / POSICIONAMENTO
         =================================================== -->
 
-        <section class="manifesto">
+        <section class="manifesto" aria-label="Seu próximo imóvel">
 
             <div class="container">
 
@@ -685,7 +692,7 @@
             CTA
         =================================================== -->
 
-        <section class="cta">
+        <section class="cta" id="contato">
 
             <div class="container">
 
@@ -698,18 +705,18 @@
                 </h2>
 
                 <p>
-                    Entre em contato e descubra oportunidades
-                    selecionadas de acordo com seus objetivos.
+                    Conte se procura um imóvel para morar ou investir, sua região
+                    de interesse e a faixa de investimento. Comece pelo WhatsApp.
                 </p>
 
 
                 <a
-                    href="https://wa.me/5598991588444"
+                    href="https://wa.me/5598991588444?text=Ol%C3%A1%2C%20Rafael!%20Vim%20pelo%20seu%20site%20e%20gostaria%20de%20receber%20op%C3%A7%C3%B5es%20de%20im%C3%B3veis%20em%20S%C3%A3o%20Lu%C3%ADs."
                     target="_blank"
                     rel="noopener noreferrer"
                     class="btn btn-primary"
                 >
-                    Falar com Rafael no WhatsApp
+                    Receber opções de imóveis
                 </a>
 
             </div>
@@ -742,7 +749,7 @@
                 <div class="social-links">
 
                     <a
-                        href="https://wa.me/5598991588444"
+                        href="https://wa.me/5598991588444?text=Ol%C3%A1%2C%20Rafael!%20Vim%20pelo%20seu%20site%20e%20gostaria%20de%20receber%20op%C3%A7%C3%B5es%20de%20im%C3%B3veis%20em%20S%C3%A3o%20Lu%C3%ADs."
                         target="_blank"
                         rel="noopener noreferrer"
                     >
@@ -784,7 +791,6 @@
 
     <footer
         class="footer"
-        id="contato"
     >
 
         <div class="container footer-container">
@@ -840,19 +846,17 @@
                 </a>
 
                 <a
-                    href="https://wa.me/5598991588444"
+                    href="https://wa.me/5598991588444?text=Ol%C3%A1%2C%20Rafael!%20Vim%20pelo%20seu%20site%20e%20gostaria%20de%20receber%20op%C3%A7%C3%B5es%20de%20im%C3%B3veis%20em%20S%C3%A3o%20Lu%C3%ADs."
                     target="_blank"
                     rel="noopener noreferrer"
                 >
                     WhatsApp
                 </a>
 
-                <a href="#">
-                    Instagram
+                <a href="https://www.instagram.com/rafaelaguiar_s/" target="_blank" rel="noopener noreferrer">Instagram
                 </a>
 
-                <a href="#">
-                    Facebook
+                <a href="https://www.facebook.com/profile.php?id=61578192650664" target="_blank" rel="noopener noreferrer">Facebook
                 </a>
 
             </div>
@@ -869,7 +873,7 @@
             </p>
 
             <p>
-                Desenvolvido por Sua Empresa
+                Desenvolvido por Arthur Kean e Chrysthyan Junior
             </p>
 
         </div>
@@ -878,6 +882,7 @@
 
 
 
+    <a class="mobile-contact" href="https://wa.me/5598991588444?text=Ol%C3%A1%2C%20Rafael!%20Vim%20pelo%20seu%20site%20e%20gostaria%20de%20receber%20op%C3%A7%C3%B5es%20de%20im%C3%B3veis%20em%20S%C3%A3o%20Lu%C3%ADs." target="_blank" rel="noopener noreferrer">Falar com Rafael no WhatsApp <span aria-hidden="true">↗</span></a>
     <script src="script.js"></script>
 
 </body>

@@ -1,481 +1,159 @@
+/* Componentes independentes: uma seção pode ser removida sem afetar as demais. */
 document.addEventListener("DOMContentLoaded", () => {
-
-    /* =====================================================
-       1. MENU MOBILE
-    ===================================================== */
-
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mobile = window.matchMedia("(max-width: 1000px)");
     const menuButton = document.querySelector(".menu-mobile");
-    const navLinks = document.querySelector(".nav-links");
-    const navItems = document.querySelectorAll(".nav-links a");
+    const nav = document.querySelector(".nav-links");
 
-    function openMenu() {
-
-        navLinks.classList.add("active");
-        document.body.classList.add("menu-open");
-
-        menuButton.textContent = "✕";
-        menuButton.setAttribute("aria-expanded", "true");
-    }
-
-
-    function closeMenu() {
-
-        navLinks.classList.remove("active");
-        document.body.classList.remove("menu-open");
-
-        menuButton.textContent = "☰";
-        menuButton.setAttribute("aria-expanded", "false");
-    }
-
-
-    function toggleMenu() {
-
-        const menuIsOpen =
-            navLinks.classList.contains("active");
-
-        if (menuIsOpen) {
-            closeMenu();
-        } else {
-            openMenu();
-        }
-    }
-
-
-    menuButton.addEventListener("click", toggleMenu);
-
-
-    /* Fecha o menu quando um link é clicado */
-
-    navItems.forEach((link) => {
-
-        link.addEventListener("click", () => {
-
-            if (window.innerWidth <= 1000) {
-                closeMenu();
+    if (menuButton && nav) {
+        document.body.classList.add("menu-ready");
+        const setMenu = (open, restoreFocus = false) => {
+            nav.classList.toggle("active", open);
+            document.body.classList.toggle("menu-open", open);
+            menuButton.textContent = open ? "✕" : "☰";
+            menuButton.setAttribute("aria-expanded", String(open));
+            menuButton.setAttribute("aria-label", `${open ? "Fechar" : "Abrir"} menu de navegação`);
+            if (restoreFocus) menuButton.focus();
+        };
+        menuButton.addEventListener("click", () => setMenu(menuButton.getAttribute("aria-expanded") !== "true"));
+        nav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
+            setMenu(false);
+            const target = document.querySelector(link.hash);
+            if (target) {
+                target.setAttribute("tabindex", "-1");
+                target.focus({ preventScroll: true });
             }
-
-        });
-
-    });
-
-
-    /* Fecha pressionando ESC */
-
-    document.addEventListener("keydown", (event) => {
-
-        if (
-            event.key === "Escape" &&
-            navLinks.classList.contains("active")
-        ) {
-            closeMenu();
-        }
-
-    });
-
-
-    /* Corrige o menu caso a tela seja redimensionada */
-
-    window.addEventListener("resize", () => {
-
-        if (window.innerWidth > 1000) {
-            closeMenu();
-        }
-
-    });
-
-
-
-    /* =====================================================
-       2. CARROSSEL DE IMÓVEIS
-    ===================================================== */
-
-    const carousels = document.querySelectorAll(".carousel");
-
-    carousels.forEach((carousel) => {
-
-        const track =
-            carousel.querySelector(".carousel-track");
-
-        const cards =
-            Array.from(
-                carousel.querySelectorAll(".property-card")
-            );
-
-        const previousButton =
-            carousel.querySelector(".carousel-prev");
-
-        const nextButton =
-            carousel.querySelector(".carousel-next");
-
-        const dotsContainer =
-            carousel.parentElement.querySelector(".carousel-dots");
-
-
-        let currentIndex = 0;
-
-        let maxIndex = 0;
-
-
-        /* ---------------------------------------------
-           Descobre o espaço entre os cards
-        --------------------------------------------- */
-
-        function getGap() {
-
-            const style =
-                window.getComputedStyle(track);
-
-            return parseFloat(style.gap) || 0;
-        }
-
-
-        /* ---------------------------------------------
-           Descobre quanto precisamos mover
-        --------------------------------------------- */
-
-        function getCardStep() {
-
-            if (!cards.length) {
-                return 0;
-            }
-
-            return (
-                cards[0].getBoundingClientRect().width
-                +
-                getGap()
-            );
-        }
-
-
-        /* ---------------------------------------------
-           Descobre quantos cards estão aparecendo
-        --------------------------------------------- */
-
-        function getVisibleCards() {
-
-            const step = getCardStep();
-
-            if (step === 0) {
-                return 1;
-            }
-
-            const visible =
-                Math.round(
-                    (track.clientWidth + getGap())
-                    /
-                    step
-                );
-
-            return Math.max(1, visible);
-        }
-
-
-        /* ---------------------------------------------
-           Atualiza os botões
-        --------------------------------------------- */
-
-        function updateButtons() {
-
-            previousButton.disabled =
-                currentIndex === 0;
-
-            nextButton.disabled =
-                currentIndex === maxIndex;
-        }
-
-
-        /* ---------------------------------------------
-           Atualiza qual indicador está ativo
-        --------------------------------------------- */
-
-        function updateDots() {
-
-            const dots =
-                dotsContainer.querySelectorAll(".dot");
-
-            dots.forEach((dot, index) => {
-
-                dot.classList.toggle(
-                    "active",
-                    index === currentIndex
-                );
-
-            });
-
-        }
-
-
-        /* ---------------------------------------------
-           Cria os indicadores dinamicamente
-        --------------------------------------------- */
-
-        function createDots() {
-
-            dotsContainer.innerHTML = "";
-
-            for (
-                let index = 0;
-                index <= maxIndex;
-                index++
-            ) {
-
-                const dot =
-                    document.createElement("button");
-
-                dot.classList.add("dot");
-
-                dot.setAttribute(
-                    "aria-label",
-                    `Ir para posição ${index + 1}`
-                );
-
-
-                if (index === currentIndex) {
-                    dot.classList.add("active");
+        }));
+        document.addEventListener("keydown", event => {
+            if (!nav.classList.contains("active")) return;
+            if (event.key === "Escape") setMenu(false, true);
+            if (event.key === "Tab") {
+                const links = [...nav.querySelectorAll("a")];
+                const first = links[0];
+                const last = links[links.length - 1];
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault(); menuButton.focus();
+                } else if (!event.shiftKey && document.activeElement === menuButton) {
+                    event.preventDefault(); first?.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault(); menuButton.focus();
+                } else if (event.shiftKey && document.activeElement === menuButton) {
+                    event.preventDefault(); last?.focus();
                 }
-
-
-                dot.addEventListener("click", () => {
-
-                    goToSlide(index);
-
-                });
-
-
-                dotsContainer.appendChild(dot);
             }
+        });
+        document.addEventListener("click", event => {
+            if (!event.target.closest(".navbar")) setMenu(false);
+        });
+        mobile.addEventListener("change", () => { if (!mobile.matches) setMenu(false); });
+    }
 
-        }
-
-
-        /* ---------------------------------------------
-           Move o carrossel
-        --------------------------------------------- */
-
-        function goToSlide(index) {
-
-            currentIndex =
-                Math.max(
-                    0,
-                    Math.min(index, maxIndex)
-                );
-
-
-            const movement =
-                getCardStep() * currentIndex;
-
-
-            track.scrollTo({
-
-                left: movement,
-
-                behavior: "smooth"
-
+    document.querySelectorAll(".carousel").forEach(carousel => {
+        const track = carousel.querySelector(".carousel-track");
+        const cards = [...carousel.querySelectorAll(".property-card")];
+        const previous = carousel.querySelector(".carousel-prev");
+        const next = carousel.querySelector(".carousel-next");
+        const dots = carousel.parentElement.querySelector(".carousel-dots");
+        const status = carousel.parentElement.querySelector(".carousel-status");
+        if (!track || !cards.length || !previous || !next || !dots) return;
+        carousel.classList.add("carousel-ready");
+        let current = 0, max = 0, visible = 1;
+        const step = () => cards[0].getBoundingClientRect().width + (parseFloat(getComputedStyle(track).gap) || 0);
+        const update = () => {
+            previous.disabled = current === 0;
+            next.disabled = current === max;
+            [...dots.children].forEach((dot, index) => {
+                dot.classList.toggle("active", index === current);
+                dot.setAttribute("aria-current", index === current ? "true" : "false");
             });
-
-
-            updateDots();
-            updateButtons();
-        }
-
-
-        /* ---------------------------------------------
-           Botão próximo
-        --------------------------------------------- */
-
-        nextButton.addEventListener("click", () => {
-
-            goToSlide(currentIndex + 1);
-
+            if (status) status.textContent = `Imóveis ${current + 1} a ${Math.min(cards.length, current + visible)} de ${cards.length}`;
+        };
+        const go = (index, instant = false) => {
+            current = Math.max(0, Math.min(index, max));
+            track.scrollTo({ left: step() * current, behavior: instant || reducedMotion.matches ? "instant" : "smooth" });
+            update();
+        };
+        const configure = () => {
+            const gap = parseFloat(getComputedStyle(track).gap) || 0;
+            visible = Math.max(1, Math.round((track.clientWidth + gap) / step()));
+            max = Math.max(0, cards.length - visible);
+            if (dots.children.length !== max + 1) {
+                dots.replaceChildren();
+                for (let index = 0; index <= max; index++) {
+                    const dot = document.createElement("button");
+                    dot.type = "button";
+                    dot.className = "dot";
+                    dot.setAttribute("aria-label", `Mostrar imóveis a partir de ${index + 1}`);
+                    dot.setAttribute("aria-controls", track.id);
+                    dot.addEventListener("click", () => go(index));
+                    dots.appendChild(dot);
+                }
+            }
+            go(current, true);
+        };
+        previous.addEventListener("click", () => go(current - 1));
+        next.addEventListener("click", () => go(current + 1));
+        track.addEventListener("keydown", event => {
+            if (event.target !== track) return;
+            const destination = { ArrowLeft: current - 1, ArrowRight: current + 1, Home: 0, End: max }[event.key];
+            if (destination !== undefined) { event.preventDefault(); go(destination); }
         });
-
-
-        /* ---------------------------------------------
-           Botão anterior
-        --------------------------------------------- */
-
-        previousButton.addEventListener("click", () => {
-
-            goToSlide(currentIndex - 1);
-
-        });
-
-
-        /* ---------------------------------------------
-           Detecta arraste manual do usuário
-        --------------------------------------------- */
-
-        let scrollTimeout;
-
-
+        let scrollTimer, resizeTimer;
         track.addEventListener("scroll", () => {
-
-            clearTimeout(scrollTimeout);
-
-
-            scrollTimeout = setTimeout(() => {
-
-                const step = getCardStep();
-
-                if (step === 0) {
-                    return;
-                }
-
-
-                const index =
-                    Math.round(
-                        track.scrollLeft / step
-                    );
-
-
-                currentIndex =
-                    Math.max(
-                        0,
-                        Math.min(index, maxIndex)
-                    );
-
-
-                updateDots();
-                updateButtons();
-
-            }, 100);
-
-        });
-
-
-        /* ---------------------------------------------
-           Configuração inicial do carrossel
-        --------------------------------------------- */
-
-        function configureCarousel() {
-
-            const visibleCards =
-                getVisibleCards();
-
-
-            maxIndex =
-                Math.max(
-                    0,
-                    cards.length - visibleCards
-                );
-
-
-            currentIndex =
-                Math.min(
-                    currentIndex,
-                    maxIndex
-                );
-
-
-            createDots();
-
-            goToSlide(currentIndex);
-        }
-
-
-        configureCarousel();
-
-
-        /* Reconfigura quando a tela muda */
-
-        let resizeTimeout;
-
-
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(() => {
+                current = Math.max(0, Math.min(max, Math.round(track.scrollLeft / step())));
+                update();
+            }, 120);
+        }, { passive: true });
         window.addEventListener("resize", () => {
-
-            clearTimeout(resizeTimeout);
-
-
-            resizeTimeout = setTimeout(() => {
-
-                configureCarousel();
-
-            }, 200);
-
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(configure, 150);
         });
-
+        configure();
     });
 
-
-
-    /* =====================================================
-       3. ANO AUTOMÁTICO NO FOOTER
-    ===================================================== */
-
-    const yearElement =
-        document.querySelector("#current-year");
-
-
-    if (yearElement) {
-
-        yearElement.textContent =
-            new Date().getFullYear();
-
+    const video = document.querySelector(".hero-video");
+    const videoButton = document.querySelector(".video-toggle");
+    if (video && videoButton) {
+        const smallScreen = window.matchMedia("(max-width: 700px)");
+        let pausedByUser = false;
+        const syncLabel = () => {
+            videoButton.textContent = video.paused ? "Reproduzir vídeo" : "Pausar vídeo";
+        };
+        const syncVideo = () => {
+            const staticHero = reducedMotion.matches || smallScreen.matches || navigator.connection?.saveData;
+            videoButton.hidden = Boolean(staticHero);
+            if (staticHero || document.hidden || pausedByUser) { video.pause(); return; }
+            const source = video.querySelector("source[data-src]");
+            if (source && !source.hasAttribute("src")) { source.src = source.dataset.src; video.load(); }
+            video.play().catch(syncLabel);
+        };
+        videoButton.addEventListener("click", () => {
+            pausedByUser = !video.paused;
+            if (pausedByUser) video.pause(); else syncVideo();
+        });
+        video.addEventListener("play", syncLabel);
+        video.addEventListener("pause", syncLabel);
+        smallScreen.addEventListener("change", syncVideo);
+        reducedMotion.addEventListener("change", syncVideo);
+        document.addEventListener("visibilitychange", syncVideo);
+        syncVideo();
     }
 
-
-
-    /* =====================================================
-       4. ANIMAÇÕES QUANDO O USUÁRIO ROLA A PÁGINA
-    ===================================================== */
-
-    const animatedElements =
-        document.querySelectorAll(`
-            .autoridade .container,
-            .section-header,
-            .carousel,
-            .sobre-imagem,
-            .sobre-content,
-            .diferenciais-grid,
-            .manifesto .container,
-            .cta .container,
-            .social-links,
-            .footer-container
-        `);
-
-
-    animatedElements.forEach((element) => {
-
-        element.classList.add("reveal");
-
-    });
-
-
-    const observer =
-        new IntersectionObserver(
-
-            (entries, observer) => {
-
-                entries.forEach((entry) => {
-
-                    if (entry.isIntersecting) {
-
-                        entry.target.classList.add(
-                            "is-visible"
-                        );
-
-
-                        observer.unobserve(
-                            entry.target
-                        );
-
-                    }
-
-                });
-
-            },
-
-            {
-                threshold: 0.15
+    const year = document.querySelector("#current-year");
+    if (year) year.textContent = new Date().getFullYear();
+    // Conteúdo permanece visível sem JavaScript, sem observer ou com movimento reduzido.
+    if ("IntersectionObserver" in window && !reducedMotion.matches) {
+        const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
             }
-
-        );
-
-
-    animatedElements.forEach((element) => {
-
-        observer.observe(element);
-
-    });
-
+        }), { threshold: 0.05 });
+        document.querySelectorAll(".section-header, .sobre-imagem, .sobre-content").forEach(element => {
+            element.classList.add("reveal");
+            observer.observe(element);
+        });
+    }
 });

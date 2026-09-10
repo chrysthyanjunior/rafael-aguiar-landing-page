@@ -96,3 +96,21 @@ As imagens, informações e elementos relacionados à identidade profissional do
 <p align="center">
   Desenvolvido por <strong>Arthur Kean</strong> & <strong>Chrysthyan Junior</strong> 🚀
 </p>
+
+## Melhorias implementadas
+
+- Links de WhatsApp com mensagem preenchida, inclusive identificação de cada imóvel; funcionam também sem JavaScript. O visitante confirma o envio no WhatsApp.
+- Contato persistente no celular, botões mais claros e links sociais do rodapé corrigidos.
+- Imagens WebP responsivas com carregamento tardio, mantendo os originais na pasta.
+- Vídeo carregado somente em telas maiores, respeitando movimento reduzido e economia de dados quando informada pelo navegador. Controle de pausa e pausa com a página em segundo plano.
+- Menu com estado acessível, Escape, gerenciamento de foco e alternativa sem JavaScript.
+- Carrossel com teclado (setas, Home e End quando a lista está focada), estado acessível e áreas de toque ampliadas.
+- Título e descrição locais, metadados de compartilhamento textual e favicon.
+
+### Verificação local
+
+Validado com Node (`node --check script.js`) e Microsoft Edge headless via Playwright em 360, 390, 768 e 1440 px. Verificados menu, Escape, foco, carrossel, mensagens dos links, ausência de transbordamento horizontal, alternativa sem JavaScript e vídeo no celular. Nenhuma mensagem foi enviada e o site não foi publicado.
+
+### Informações necessárias antes de publicar
+
+Confirmar nomes, imagens, características, preços e disponibilidade dos imóveis. Os nomes genéricos foram preservados para não inventar informações. Confirmar os dados profissionais e links de contato. Com o domínio definitivo, configurar canonical, URL/imagem absoluta de compartilhamento e sitemap. A medição de conversões ainda depende da escolha/configuração de uma ferramenta e do acompanhamento dos contatos; nenhum rastreador ou coleta de dados foi adicionado.
